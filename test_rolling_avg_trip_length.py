@@ -16,7 +16,6 @@ class MyTestCase(unittest.TestCase):
         time_series_data = time_series_index_by_col(data,datetime_col)
         self.assertEqual('datetime64[ns]',time_series_data.index.dtype)
 
-
 if __name__ == '__main__':
     unittest.main()
 
