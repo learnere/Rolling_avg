@@ -46,8 +46,6 @@ def ingest_data(ingest_data_file, old_data_file):
             new_data.append(dict_ingest)
         return pd.DataFrame(new_data)
 
-
-
 def get_avg_distance(dataframe):
     id_counts= data.groupby(['id','pickup_datetime'])['id'].size().reset_index(name='id_counts')
     sum_distance= data.groupby(['id','pickup_datetime'])['distance'].sum().reset_index(name='sum_distance')
