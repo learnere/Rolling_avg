@@ -13,8 +13,7 @@
 __author__ = 'pzhang01'
 import pandas as pd
 
-test = 'data/test/test_input'
-data_file = 'data/input/yellow_tripdata_2019-01.csv'
+
 
 #test functions
 
@@ -33,8 +32,7 @@ def get_data(file_path):
     id =[]
     distance = []
     pickup_datetime = []
-    # dtype={'VendorID': 'int64', 'trip_distance': 'float64','tpep_pickup_datetime':'object'},
-    chunk_iter = pd.read_csv(test,chunksize=100000, usecols=['VendorID', 'trip_distance','tpep_pickup_datetime'])
+    chunk_iter = pd.read_csv(file_path,chunksize=100000, usecols=['VendorID', 'trip_distance','tpep_pickup_datetime'])
     for chunk in chunk_iter:
         id.append(chunk['VendorID'])
         distance.append(chunk['trip_distance'])
@@ -42,7 +40,7 @@ def get_data(file_path):
     vendor_id = pd.concat(id)
     trip_distance = pd.concat(distance)
     tpep_pickup_datetime = pd.concat(pickup_datetime)
-    # rename columes
+    # rename columns
     data= pd.DataFrame({'id': vendor_id, 'distance':trip_distance, 'pickup_datetime': tpep_pickup_datetime})
     return data
 
@@ -62,9 +60,11 @@ def cal_avg_trip_length_by_col(dataframe,col):
     # calculate the average distance
     return merged_df.join(avg_distance)
 
+# test = 'data/test/test_input'
+data_file = 'data/input/yellow_tripdata_2019-01.csv'
 
-
-data = get_data(test)
+data = get_data(data_file)
 check_null(data)
 col = 'id'
+print('result\n')
 print(cal_avg_trip_length_by_col(data,col))
