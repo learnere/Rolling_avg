@@ -16,7 +16,6 @@ import pandas as pd
 
 
 #test functions
-
 def get_id_counts_by_col(dataframe,col):
     return dataframe.groupby([col]).size().reset_index(name='id_counts')
 def get_sum_dist_by_col(dataframe,col):
@@ -60,7 +59,6 @@ def cal_avg_trip_length_by_col(dataframe,col):
     # calculate the average distance
     return merged_df.join(avg_distance)
 
-# test = 'data/test/test_input'
 data_file = 'data/input/yellow_tripdata_2019-01.csv'
 
 data = get_data(data_file)
