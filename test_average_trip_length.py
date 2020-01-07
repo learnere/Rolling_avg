@@ -13,7 +13,6 @@
 __author__ = 'pzhang01'
 
 import unittest
-import pandas as pd
 from pandas.util.testing import assert_frame_equal
 from avg_trip_length import *
 
