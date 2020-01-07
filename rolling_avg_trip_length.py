@@ -26,26 +26,25 @@ def time_series_index_by_col(dataframe, datetime_col_name):
     return dataframe.set_index(datetime_col_name)
 
 
-def ingest_data(ingest_data_file, old_data_file):
-
-    old_data = pd.read_csv(old_data_file)
-    ingest_data = pd.read_csv(ingest_data_file)
-    s1 = old_data.dtypes
-    s2 = ingest_data.dtypes
+def ingest_data(old_dataframe, ingest_data_frame):
+    s1 = old_dataframe.head(5).dtypes
+    s2 = ingest_data_frame.head(5).dtypes
     if s1.equals(s2):
-        # df to dict by row
-        old_data_dict = old_data.to_dict('records')
-        ingest_data_dict = ingest_data.to_dict('records')
-        new_data = []
-        for row_old in old_data_dict:
-            dict_old = {}
-            dict_old.update(row_old)
-            new_data.append(dict_old)
-        for row_ingest in ingest_data_dict:
-            dict_ingest ={}
-            dict_ingest.update(row_ingest)
-            new_data.append(dict_ingest)
-        return pd.DataFrame(new_data)
+        old_data_dict = old_dataframe.to_dict('list')
+        ingest_data_dict = ingest_data_frame.to_dict('list')
+        id_list = old_data_dict['id']
+        distance_list = old_data_dict['distance']
+        time_list = old_data_dict['pickup_datetime']
+        for i in ingest_data_dict['id']:
+            id_list.append(i)
+        for j in ingest_data_dict['distance']:
+            distance_list.append(j)
+        for k in ingest_data_dict['pickup_datetime']:
+            time_list.append(k)
+        new_data = {'id':id_list,'distance':distance_list, 'pickup_datetime':time_list}
+        return pd.DataFrame.from_dict(new_data)
+    else:
+        return "Data types of the two inputs do not match"
 
 
 
@@ -67,23 +66,20 @@ ingest_file = 'data/input/new_data.csv'
 data_file = 'data/input/yellow_tripdata_2019-01.csv'
 test = 'data/test/test_input'
 datetime_col = 'pickup_datetime'
-start_time1=time.time()
+
 data = get_data(data_file)
-print(data)
-end_time1=time.time()
-print('Execution time = %.6f seconds' % (end_time1-start_time1))
+
 new_data = get_data(ingest_file)
-start_time=time.time()
-print(ingest_data(data,new_data))
-end_time=time.time()
-print('Execution time = %.6f seconds' % (end_time-start_time))
-# result = (data.pipe(ingest_data,ingest_data_frame = new_data)
-#               .pipe(time_series_index_by_col,datetime_col)
-#               .pipe(get_avg_distance)
-#               .pipe(get_rolling_avg_by_days, rolling_day = 2))
-#
-# print(result)
 
 
+# start_time=time.time()
+result = (data.pipe(ingest_data,ingest_data_frame = new_data)
+              .pipe(time_series_index_by_col,datetime_col)
+              .pipe(get_avg_distance)
+              .pipe(get_rolling_avg_by_days, rolling_day = 45))
+
+print(result)
+# end_time=time.time()
+# print('Pipeline execution time = %.6f seconds' % (end_time-start_time))
 
 
