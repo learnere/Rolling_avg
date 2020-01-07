@@ -2,7 +2,7 @@
 """
 -------------------------------------------------
    File Name：     rolling_avg_trip_length
-   Description :
+   Description :   #https://wiki.python.org/moin/TimeComplexity
    Author :        pzhang01
    date：          03/01/2020:
 -------------------------------------------------
@@ -13,18 +13,21 @@
 __author__ = 'pzhang01'
 
 import pandas as pd
-from avg_trip_length import get_data, check_null
+import numpy as np
+import time
+from avg_trip_length import get_data
 
 
 #
 def time_series_index_by_col(dataframe, datetime_col_name):
     # set a column as time series index
     # eg :date_time_col_name ='pickup_datetim
-    data[datetime_col_name]= pd.to_datetime(data[datetime_col_name])
-    return data.set_index(datetime_col_name)
+    dataframe[datetime_col_name]= pd.to_datetime(dataframe[datetime_col_name])
+    return dataframe.set_index(datetime_col_name)
 
 
 def ingest_data(ingest_data_file, old_data_file):
+
     old_data = pd.read_csv(old_data_file)
     ingest_data = pd.read_csv(ingest_data_file)
     s1 = old_data.dtypes
@@ -47,8 +50,8 @@ def ingest_data(ingest_data_file, old_data_file):
 
 
 def get_avg_distance(dataframe):
-    id_counts= data.groupby(['id','pickup_datetime'])['id'].size().reset_index(name='id_counts')
-    sum_distance= data.groupby(['id','pickup_datetime'])['distance'].sum().reset_index(name='sum_distance')
+    id_counts= dataframe.groupby(['id','pickup_datetime'])['id'].size().reset_index(name='id_counts')
+    sum_distance= dataframe.groupby(['id','pickup_datetime'])['distance'].sum().reset_index(name='sum_distance')
     cols_to_use = sum_distance.columns.difference(id_counts.columns)
     # remove duplicate columns
     merged_df = pd.concat([sum_distance[cols_to_use],id_counts], axis=1, join='inner')
@@ -62,20 +65,25 @@ def get_rolling_avg_by_days(avg_dataframe, rolling_day):
 
 ingest_file = 'data/input/new_data.csv'
 data_file = 'data/input/yellow_tripdata_2019-01.csv'
-
+test = 'data/test/test_input'
 datetime_col = 'pickup_datetime'
+start_time1=time.time()
 data = get_data(data_file)
-print(data[datetime_col].dtype)
-time_series_data = time_series_index_by_col(data,datetime_col)
-print(time_series_data)
-print(time_series_data.index.dtype)
-print('*')
-print(time_series_data.dtypes)
+print(data)
+end_time1=time.time()
+print('Execution time = %.6f seconds' % (end_time1-start_time1))
+new_data = get_data(ingest_file)
+start_time=time.time()
+print(ingest_data(data,new_data))
+end_time=time.time()
+print('Execution time = %.6f seconds' % (end_time-start_time))
+# result = (data.pipe(ingest_data,ingest_data_frame = new_data)
+#               .pipe(time_series_index_by_col,datetime_col)
+#               .pipe(get_avg_distance)
+#               .pipe(get_rolling_avg_by_days, rolling_day = 2))
+#
+# print(result)
 
-
-result = (time_series_data.pipe(get_avg_distance)
-              .pipe(get_rolling_avg_by_days, rolling_day = 2))
-print(result)
 
 
 
