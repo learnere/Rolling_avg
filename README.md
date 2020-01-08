@@ -4,9 +4,9 @@ To run this code in Python IDE:
 2. You should get a file named yellow_tripdata_2019-01.csv 
 3. Put the data in directory data/input/FILE_NAME  
   **DO NOT CHANGE THE FILE NAME**
-4. The code named avg_trip_length.py calculates the average trip length of all Yellow Taxis for a month.
+4. The code named avg_trip_length.py calculates the average trip length of all yellow taxis for a month grouped by VendorID.
 5. The code named rolling_avg_trip_length.py can ingest new data (data/input/new_data.csv)
-   and calculates the 45 day rolling average trip length.
+   and calculates the 45-day rolling average trip length grouped by VendorID.
 
 # To scale the pipeline to a multiple of the data size that does not fit any more to one machine can be done by following these steps:
 
