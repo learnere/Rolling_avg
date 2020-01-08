@@ -27,7 +27,7 @@ schema = StructType([structField('id', IntegerType(), True),StructField('pickup_
 
 4. Define the grouped map Pandas User Defined Function using @pandas_udf to annotate the Python functions (eg.get_avg_distance etc)that compose the pipeline
 ```python
-@pandas_udf (schema, PandasUDFType.GROUPED_MAP) 
+@pandas_udf(schema, PandasUDFType.GROUPED_MAP) 
     def func_1() 
     def func_2() 
     def func_3()
