@@ -40,5 +40,5 @@ pipeline = Pipeline(stages=[fun_1, fun2, fun_3])
 
 6. Partition the data and run the UDF with groupBy().apply() to implement the “split-apply-combine” pattern. 
 ```Python
-result = pipeline.groupby('id').apply(spark_df)
+result = pipeline.groupBy('id').apply(spark_df)
 ```
